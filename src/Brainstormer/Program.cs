@@ -1,3 +1,5 @@
+using Brainstormer.Models.interfaces;
+using Brainstormer.Models.models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSingleton<IStateStorage, StateStorage>();
 
 var app = builder.Build();
 
