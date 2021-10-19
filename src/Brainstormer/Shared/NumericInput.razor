@@ -1,0 +1,22 @@
+<div>
+    <label>
+        @Label
+        <input type="number" @bind="Value" @oninput="UpdateValue"/>
+    </label>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; } = "";
+
+    [Parameter] 
+    public EventCallback<int> ValueChanged { get; set; }
+
+    public int Value { get; set; }
+
+    private async Task UpdateValue()
+    {
+        await ValueChanged.InvokeAsync(Value);
+    }
+}

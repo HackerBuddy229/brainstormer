@@ -1,40 +1,36 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Brainstormer</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@using Brainstormer.Models.models
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
+@inject NavigationManager _navigationManager
 
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+<MudGrid Justify="Justify.FlexStart">
+    @foreach (var item in _navItems)
     {
-        collapseNavMenu = !collapseNavMenu;
-    }
+        <MudItem xs="2">
+            <MudButton @onclick="() => NavigateTo(item.Path)"
+                       Variant="Variant.Filled"
+                       Color="Color.Success">
+                @item.Label
+            </MudButton>
+        </MudItem>
+    } 
+</MudGrid>
+<MudSpacer/>
+<MudText Color="Color.Default" Typo="Typo.h3">Brainstormer</MudText>
 
+
+@code
+{
+    private readonly IEnumerable<NavigationItem> _navItems = new List<NavigationItem>
+    {
+        new NavigationItem("1. Setup", "/Setup"),
+        new NavigationItem("2. Create", "/"),
+        new NavigationItem("3. Cull", "/"),
+        new NavigationItem("4. Describe", "/"),
+        new NavigationItem("5. Rank", "/"),
+    };
+
+    private void NavigateTo(string path)
+    {
+        _navigationManager.NavigateTo(path);
+    }
 }

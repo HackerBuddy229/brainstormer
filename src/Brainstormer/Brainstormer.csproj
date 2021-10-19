@@ -11,4 +11,8 @@
       <ProjectReference Include="..\Brainstormer.Models\Brainstormer.Models.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MudBlazor" Version="5.2.0-rc4" />
+    </ItemGroup>
+
 </Project>

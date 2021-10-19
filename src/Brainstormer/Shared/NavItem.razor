@@ -1,0 +1,20 @@
+@inject NavigationManager _navigationManager
+
+<div class="bg-gray-700 rounded-xl text-center px-4 h-2/3 flex flex-row justify-around align-center cursor-pointer" @onclick="Redirect">
+    <h2 class="text-white block text-center">@Text</h2>
+</div>
+
+@code {
+
+    [Parameter]
+    public string Path { get; set; } = "/";
+
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    private void Redirect(MouseEventArgs obj)
+    {
+        _navigationManager.NavigateTo(Path);
+    }
+
+}

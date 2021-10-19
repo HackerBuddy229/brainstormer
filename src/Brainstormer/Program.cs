@@ -1,15 +1,22 @@
 using Brainstormer.Models.interfaces;
 using Brainstormer.Models.models;
+using Brainstormer.services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MudBlazor.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddMudServices();
+
 builder.Services.AddSingleton<IStateStorage, StateStorage>();
+builder.Services.AddSingleton<IStorageService, StorageService>();
 
 var app = builder.Build();
 
