@@ -7,5 +7,6 @@ namespace Brainstormer.Models.models
     {
 
         public IEnumerable<Idea> Ideas { get; init; } = new List<Idea>();
+        public BrainstormSettings BrainstormSettings { get; set; } = new BrainstormSettings();
     }
 }

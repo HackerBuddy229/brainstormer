@@ -1,6 +1,45 @@
 @page "/Setup"
-<h3>Setup</h3>
+@using Brainstormer.Models.interfaces
+
+@inject IStateStorage _stateStorage
+@inject ISnackbar _snackbar
+
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h5" Color="Color.Dark" Align="Align.Center">Setup</MudText>
+        </MudItem>
+        
+
+        <MudItem xs="12">
+            <MudNumericField Label="nr. initial ideas"
+                             Variant="Variant.Outlined"
+                             Step="5"
+                             Min="2"
+                             Max="150"
+                             @bind-value="_stateStorage.BrainstormSettings.StartAmount"/>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudNumericField Label="nr. final ideas"
+                             Variant="Variant.Outlined"
+                             Step="5"
+                             Min="1"
+                             Max="100"
+                             @bind-value="_stateStorage.BrainstormSettings.ResultingAmount"/>
+        </MudItem>
+        <MudItem xs="6">
+            <MudText Typo="Typo.caption">
+                When you feel done, continue with step 2 
+                <MudIcon Icon="@Icons.Rounded.ArrowForward" Size="Size.Small"/>
+            </MudText>
+        </MudItem>
+
+    </MudGrid>
+</MudContainer>
 
 @code {
-    
+
+
 }
