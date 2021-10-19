@@ -6,7 +6,7 @@ namespace Brainstormer.Models.models
     public class StateStorage : IStateStorage
     {
 
-        public IEnumerable<Idea> Ideas { get; init; } = new List<Idea>();
+        public IList<Idea> Ideas { get; set; } = new List<Idea>();
         public BrainstormSettings BrainstormSettings { get; set; } = new BrainstormSettings();
     }
 }

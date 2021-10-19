@@ -5,7 +5,7 @@ namespace Brainstormer.Models.interfaces
 {
     public interface IStateStorage
     {
-        public IEnumerable<Idea> Ideas { get; init; }
+        public IList<Idea> Ideas { get; set; }
         public BrainstormSettings BrainstormSettings { get; set; }
     }
 }

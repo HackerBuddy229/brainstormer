@@ -1,0 +1,43 @@
+@page "/Create"
+@using Brainstormer.Models.interfaces
+@using Brainstormer.Models.models
+@using System.Security.Cryptography.Xml
+
+@inject IStateStorage _stateStorage
+
+<MudPaper Width="MaxWidth" Height="MaxHeight">
+    <MudGrid Justify="Justify.SpaceBetween">
+        <MudItem xs="12">
+            <MudText>Come up with some ideas!</MudText>
+        </MudItem>
+        <MudItem xs="12"> 
+            <!-- ideas here-->
+            <MudGrid>
+                @foreach (var idea in _stateStorage.Ideas)
+                {
+                    <MudItem xs="3" @onclick="() => RemoveIdea(idea)">
+                        <MudText Align="Align.Center" Typo="Typo.h6" Color="Color.Info">
+                            @idea.Name
+                        </MudText>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField @bind-Value="_newIdea.Name" Label="Idea" Variant="Variant.Outlined" Placeholder="Your Idea"/>
+            <MudIconButton Icon="@Icons.Filled.CheckBox" @onclick="AddIdea"/>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+
+@code {
+    Idea _newIdea = new Idea();
+
+    private void AddIdea()
+    {
+        _stateStorage.Ideas.Add(_newIdea);
+        _newIdea = new Idea();
+    }
+
+    private void RemoveIdea(Idea idea) => _stateStorage.Ideas.Remove(idea);
+}
