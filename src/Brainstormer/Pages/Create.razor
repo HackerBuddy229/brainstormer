@@ -5,8 +5,8 @@
 
 @inject IStateStorage _stateStorage
 
-<MudPaper Width="MaxWidth" Height="MaxHeight">
-    <MudGrid Justify="Justify.SpaceBetween">
+<MudPaper Width="MaxWidth" Min-Height="100%">
+    <MudGrid Justify="Justify.SpaceBetween" Min-Height="100%">
         <MudItem xs="12">
             <MudText>Come up with some ideas!</MudText>
         </MudItem>
@@ -24,8 +24,14 @@
             </MudGrid>
         </MudItem>
         <MudItem xs="12">
-            <MudTextField @bind-Value="_newIdea.Name" Label="Idea" Variant="Variant.Outlined" Placeholder="Your Idea"/>
-            <MudIconButton Icon="@Icons.Filled.CheckBox" @onclick="AddIdea"/>
+            <MudGrid Justify="Justify.Center">
+                <MudItem xs="4">
+                    <MudTextField @bind-Value="_newIdea.Name" Label="Idea" Variant="Variant.Outlined" Placeholder="Your Idea"/>
+                </MudItem>
+                <MudItem xs="2">
+                    <MudIconButton Icon="@Icons.Filled.CheckBox" @onclick="AddIdea"/>
+                </MudItem>
+            </MudGrid>
         </MudItem>
     </MudGrid>
 </MudPaper>
