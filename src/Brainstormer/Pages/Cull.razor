@@ -1,28 +1,76 @@
 @page "/Cull"
+@using Brainstormer.Models.interfaces
 
 @inject ISnackbar _snackbar
+@inject IStateStorage _stateStorage
 
-<h3>Cull</h3>
+<MudPaper Width="MaxWidth" Elevation="0">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12">
+            <MudText Align="Align.Center" Typo="Typo.h3">Remove some ideas.</MudText>
+        </MudItem>
+        
+        <MudItem xs="12">
+            <MudGrid Justify="Justify.Center">
+                @foreach (var idea in _stateStorage.Ideas)
+                {
+                    <MudItem xs="3" @onclick="() => RemoveIdea(idea)">
+                        <MudCard Elevation="2">
+                            <MudCardHeader>
+                                <MudText Typo="Typo.h5" Color="Color.Error" Align="Align.Center">
+                                    @idea.Name
+                                </MudText>
+                            </MudCardHeader>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
 
 @code {
 
-    private void RemoveIdea(Idea idea)
+    protected override void OnAfterRender(bool firstRender)
     {
-        throw new NotImplementedException();
+        _snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+        base.OnAfterRender(firstRender);
     }
 
-    private void CheckRequirements()
+    private void RemoveIdea(Idea idea)
     {
-        throw new NotImplementedException();
+        _stateStorage.Ideas.Remove(idea);
+        UndoSnackbar(idea);
+        if (CheckRequirements())
+            CompleteSnackbar();
+            
     }
+
+    private bool CheckRequirements() => _stateStorage.Ideas.Count == _stateStorage.BrainstormSettings.ResultingAmount;
 
     private void UndoSnackbar(Idea idea)
     {
-        throw new NotImplementedException();
+        _snackbar.Add("Are you sure?", Severity.Warning, config =>
+        {
+            config.Action = "Undo";
+            config.ActionColor = Color.Primary;
+            config.Onclick = snackbar =>
+            {
+                _stateStorage.Ideas.Add(idea);
+                StateHasChanged();
+                return Task.CompletedTask;
+            };
+        });
     }
 
     private void CompleteSnackbar()
     {
-        throw new NotImplementedException();
+        const string msg = "You don't have to remove any more ideas now, feel free to go forth";
+
+        _snackbar.Add(msg, Severity.Success, config =>
+        {
+            config.Icon = Icons.Filled.CheckBox;
+        });
+
     }
 }

@@ -5,39 +5,48 @@
 
 @inject IStateStorage _stateStorage
 
-<MudPaper Width="MaxWidth" Min-Height="100%">
-    <MudGrid Justify="Justify.SpaceBetween" Min-Height="100%">
+<MudPaper Width="MaxWidth" Style="min-height: 100%;" Elevation="0">
+    <MudGrid Justify="Justify.Center" Style="min-height: 100%;">
         <MudItem xs="12">
-            <MudText>Come up with some ideas!</MudText>
+            <MudText Align="Align.Center" Typo="Typo.h3">Come up with some ideas!</MudText>
         </MudItem>
-        <MudItem xs="12"> 
+        
+        <MudItem xs="12" Style="height: 75vh"> 
             <!-- ideas here-->
-            <MudGrid>
+            <MudGrid Justify="Justify.SpaceAround">
                 @foreach (var idea in _stateStorage.Ideas)
                 {
                     <MudItem xs="3" @onclick="() => RemoveIdea(idea)">
-                        <MudText Align="Align.Center" Typo="Typo.h6" Color="Color.Info">
-                            @idea.Name
-                        </MudText>
+                        <MudCard Elevation="2">
+                            <MudCardHeader>
+                                <MudText Style="width: 100%" 
+                                         Align="Align.Center" 
+                                         Typo="Typo.h6" 
+                                         Color="Color.Info">@idea.Name</MudText>
+                            </MudCardHeader>
+                        </MudCard>
+                        
                     </MudItem>
                 }
             </MudGrid>
         </MudItem>
-        <MudItem xs="12">
-            <MudGrid Justify="Justify.Center">
-                <MudItem xs="4">
-                    <MudTextField @bind-Value="_newIdea.Name" Label="Idea" Variant="Variant.Outlined" Placeholder="Your Idea"/>
-                </MudItem>
-                <MudItem xs="2">
-                    <MudIconButton Icon="@Icons.Filled.CheckBox" @onclick="AddIdea"/>
-                </MudItem>
-            </MudGrid>
+        
+        <MudItem xs="5">
+            <MudTextField @bind-Value="_newIdea.Name" 
+                          Label="Idea" Variant="Variant.Outlined" 
+                          Placeholder="Your Idea" 
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Filled.CheckBox"
+                          OnAdornmentClick="AddIdea"
+                          @onkeypress="EnterIdea"
+                          @ref="_mudTextField"/>
         </MudItem>
     </MudGrid>
 </MudPaper>
 
 @code {
     Idea _newIdea = new Idea();
+    MudTextField<string> _mudTextField;
 
     private void AddIdea()
     {
@@ -46,4 +55,15 @@
     }
 
     private void RemoveIdea(Idea idea) => _stateStorage.Ideas.Remove(idea);
+
+    private void EnterIdea(KeyboardEventArgs obj)
+    {
+        if (obj.Key == "Enter")
+        {
+            AddIdea();
+            _mudTextField.Clear();
+        }
+            
+    }
+
 }
