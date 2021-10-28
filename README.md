@@ -1,0 +1,1 @@
+sudo docker run --rm -P -d -p 8080:80 -p 443:443  brainstormer:current

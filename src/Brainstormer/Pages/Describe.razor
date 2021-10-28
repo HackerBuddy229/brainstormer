@@ -1,0 +1,88 @@
+@page "/Describe"
+@using Brainstormer.Models.interfaces
+
+@inject IStateStorage _stateStorage;
+@inject ISnackbar _snackbar;
+
+<MudContainer>
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h3" Align="Align.Center">
+                Describe your ideas!
+            </MudText>
+        </MudItem>
+        
+        <MudItem xs="9">
+            <MudCard Elevation="2">
+                <MudCardHeader>
+                    <MudText Typo="Typo.h5" Color="Color.Info">@_currentIdea.Name</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField Variant="Variant.Outlined" 
+                                  @bind-Value="_currentIdea.Description" 
+                                  Label="Description" 
+                                  Lines="6"/>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid Justify="Justify.Center">
+                <MudButton Variant="Variant.Outlined" 
+                           StartIcon="@Icons.Filled.ArrowBack" 
+                           Color="Color.Warning" 
+                           @onclick="Undo">
+                    Back
+                </MudButton>
+                <MudDivider Vertical="true"/>
+                <MudButton Variant="Variant.Outlined" 
+                           EndIcon="@Icons.Filled.ArrowForward" 
+                           Color="Color.Success"
+                           @onclick="Next">
+                    Back
+                </MudButton>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    private int _index = 0;
+    private Idea _currentIdea => _stateStorage.Ideas[_index];
+
+    private void Next()
+    {
+        if (this._index + 1 == _stateStorage.Ideas.Count)
+        {
+            _index = 0;
+            StateHasChanged();
+            
+            CompleteSnackbar();
+            return;
+        }
+
+        _index++;
+        StateHasChanged();
+    }
+
+    private void Undo()
+    {
+        if (_index - 1 < 0)
+        {
+            _index = _stateStorage.Ideas.Count - 1;
+            StateHasChanged();
+            return;
+        }
+
+        _index--;
+        StateHasChanged();
+    }
+
+    private void CompleteSnackbar()
+    {
+        const string msg = "Awesome... Go ahead and rank your ideas now";
+        _snackbar.Add(msg, Severity.Success, config =>
+        {
+            config.Icon = Icons.Filled.CheckBox;
+        });
+    }
+}

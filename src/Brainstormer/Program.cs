@@ -18,6 +18,8 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<IStateStorage, StateStorage>();
 builder.Services.AddSingleton<IStorageService, StorageService>();
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
