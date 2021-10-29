@@ -1,6 +1,73 @@
 @page "/Rank"
-<h3>Rank</h3>
+
+@inject IStateStorage _stateStorage
+@inject NavigationManager _navigationManager
+
+
+<MudContainer>
+ <MudGrid>
+  <MudItem xs="12">
+   <MudText Typo="Typo.h3" Align="Align.Center">Rank</MudText>
+  </MudItem>
+  
+  <MudItem xs="12">
+   <MudGrid>
+    @foreach (var (idea, index) in _stateStorage.Ideas.Select((idea, i) => (idea, i)))
+    {
+     <MudItem xs="4">
+      <MudCard>
+       <MudCardHeader>
+        <MudText Typo="Typo.h5" Color="Color.Success">
+         @(index+1) - @idea.Name
+        </MudText>
+       </MudCardHeader>
+       <MudCardContent>
+        <MudText Typo="Typo.body1">
+         @idea.Description
+        </MudText>
+       </MudCardContent>
+       <MudCardActions>
+        <MudIconButton Icon="@Icons.Filled.ArrowCircleUp" @onclick="() => MoveUp(idea, index)"/>
+        <MudIconButton Icon="@Icons.Filled.ArrowCircleDown" @onclick="() => MoveDown(idea, index)"/>
+       </MudCardActions>
+      </MudCard>
+     </MudItem>
+    }
+   </MudGrid>
+  </MudItem>
+  <MudItem xs="5">
+   <MudButton @onclick="Download">Download your Work</MudButton>
+  </MudItem>
+ </MudGrid>
+</MudContainer>
 
 @code {
-    
+
+ private void MoveUp(Idea idea, int index)
+ {
+  if (index <= 0)
+   return;
+
+  _stateStorage.Ideas[index] = _stateStorage.Ideas[index - 1];
+  _stateStorage.Ideas[index - 1] = idea;
+  
+  StateHasChanged();
+ }
+
+ private void MoveDown(Idea idea, int index)
+ {
+  if (index >= _stateStorage.Ideas.Count-1)
+   return;
+
+  _stateStorage.Ideas[index] = _stateStorage.Ideas[index + 1];
+  _stateStorage.Ideas[index + 1] = idea;
+  
+  StateHasChanged();
+ }
+
+ private void Download()
+ {
+  _navigationManager.NavigateTo("/Download", true);
+ }
+
 }
