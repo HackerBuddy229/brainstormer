@@ -3,6 +3,7 @@
 
 @inject IStateStorage _stateStorage;
 @inject ISnackbar _snackbar;
+@inject NavigationManager _navigationManager
 
 <MudContainer>
     <MudGrid Justify="Justify.Center">
@@ -47,7 +48,19 @@
 
 @code {
     private int _index = 0;
-    private Idea _currentIdea => _stateStorage.Ideas[_index];
+    private Idea _currentIdea => _stateStorage.Ideas.Any() ? _stateStorage.Ideas[_index] : new Idea();
+
+    protected override void OnInitialized()
+    {
+        if (!_stateStorage.Ideas.Any())
+        {
+            const string msg = "Create some ideas before you try to describe them.";
+            _snackbar.Add(msg, Severity.Warning);
+            
+            _navigationManager.NavigateTo("/Create");
+        }
+        base.OnInitialized();
+    }
 
     private void Next()
     {
