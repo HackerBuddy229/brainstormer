@@ -48,10 +48,11 @@
     Idea _newIdea = new Idea();
     MudTextField<string> _mudTextField;
 
-    private void AddIdea()
+    private async Task AddIdea()
     {
         _stateStorage.Ideas.Add(_newIdea);
         _newIdea = new Idea();
+        await _stateStorage.StateHasChanged();
     }
 
     private void RemoveIdea(Idea idea) => _stateStorage.Ideas.Remove(idea);
