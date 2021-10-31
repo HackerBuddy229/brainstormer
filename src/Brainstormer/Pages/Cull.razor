@@ -37,10 +37,11 @@
         base.OnAfterRender(firstRender);
     }
 
-    private void RemoveIdea(Idea idea)
+    private async Task RemoveIdea(Idea idea)
     {
         _stateStorage.Ideas.Remove(idea);
         UndoSnackbar(idea);
+        await _stateStorage.StateHasChanged();
         if (CheckRequirements())
             CompleteSnackbar();
             

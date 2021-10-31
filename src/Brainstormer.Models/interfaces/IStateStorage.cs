@@ -7,5 +7,8 @@ namespace Brainstormer.Models.interfaces
     {
         public IList<Idea> Ideas { get; set; }
         public BrainstormSettings BrainstormSettings { get; set; }
+
+        public void Subscribe(Func<Task> action);
+        public Task StateHasChanged();
     }
 }

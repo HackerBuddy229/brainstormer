@@ -1,6 +1,7 @@
 ﻿@using Brainstormer.Models.models
 
 @inject NavigationManager _navigationManager
+@inject IStateStorage _stateStorage
 
 <MudGrid Justify="Justify.FlexStart">
     @foreach (var item in _navItems)
@@ -8,7 +9,7 @@
         <MudItem xs="2">
             <MudButton @onclick="() => NavigateTo(item.Path)"
                        Variant="Variant.Filled"
-                       Color="Color.Info">
+                       Color="Color.Info" Disabled="!item.ActiveCondition()">
                 @item.Label
             </MudButton>
         </MudItem>
@@ -20,17 +21,30 @@
 
 @code
 {
-    private readonly IEnumerable<NavigationItem> _navItems = new List<NavigationItem>
+    
+    
+    private IEnumerable<NavigationItem> _navItems;
+
+    protected override void OnInitialized()
     {
-        new NavigationItem("1. Setup", "/Setup"),
-        new NavigationItem("2. Create", "/Create"),
-        new NavigationItem("3. Cull", "/Cull"),
-        new NavigationItem("4. Describe", "/Describe"),
-        new NavigationItem("5. Rank", "/Rank"),
+        _navItems = NavigationItems();
+        _stateStorage.Subscribe(StateStorageHasChanged);
+        base.OnInitialized();
+    }
+
+    private IList<NavigationItem> NavigationItems() => new List<NavigationItem>
+    {
+        new NavigationItem("1. Setup", "/Setup", () => true),
+        new NavigationItem("2. Create", "/Create", () => true),
+        new NavigationItem("3. Cull", "/Cull", () => _stateStorage.Ideas.Any()),
+        new NavigationItem("4. Describe", "/Describe", () => _stateStorage.Ideas.Any()),
+        new NavigationItem("5. Rank", "/Rank", () => _stateStorage.Ideas.Any())
     };
 
     private void NavigateTo(string path)
     {
         _navigationManager.NavigateTo(path);
     }
+
+    private async Task StateStorageHasChanged() => await InvokeAsync(StateHasChanged);
 }
